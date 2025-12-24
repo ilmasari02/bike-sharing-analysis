@@ -9,11 +9,13 @@ st.set_page_config(page_title="Bike Sharing Dashboard", layout="wide")
 # Load Data
 @st.cache_data
 def load_data():
-    # Pastikan file day.csv dan hour.csv ada di folder yang sama
     day_df = pd.read_csv("day.csv", delimiter=";")
     hour_df = pd.read_csv("hour.csv", delimiter=";")
-    day_df['dteday'] = pd.to_datetime(day_df['dteday'])
-    hour_df['dteday'] = pd.to_datetime(hour_df['dteday'])
+    
+    # Tambahkan dayfirst=True agar Python tahu formatnya Hari/Bulan/Tahun
+    day_df['dteday'] = pd.to_datetime(day_df['dteday'], dayfirst=True)
+    hour_df['dteday'] = pd.to_datetime(hour_df['dteday'], dayfirst=True)
+    
     return day_df, hour_df
 
 day_df, hour_df = load_data()
@@ -88,5 +90,6 @@ fig, ax = plt.subplots(figsize=(10, 5))
 sns.scatterplot(data=main_df, x='temp', y='cnt', hue='rental_category', palette='rocket', ax=ax)
 ax.set_title("Hubungan Suhu dan Jumlah Sewa Berdasarkan Kategori")
 st.pyplot(fig)
+
 
 st.caption("Copyright (c) Ilma Sari 2024")
